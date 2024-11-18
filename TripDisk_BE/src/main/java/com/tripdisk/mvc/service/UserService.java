@@ -1,5 +1,11 @@
 package com.tripdisk.mvc.service;
 
-public class UserService {
+import com.tripdisk.mvc.model.dto.User;
+
+public interface UserService {
+
+	boolean addUser(User user);
+	
+	
 
 }
