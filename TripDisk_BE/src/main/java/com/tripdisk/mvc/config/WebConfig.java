@@ -6,8 +6,6 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 //import com.tripdisk.mvc.interceptor.AdminInterceptor;
 
 @Configuration
@@ -20,19 +18,12 @@ public class WebConfig implements WebMvcConfigurer{
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowCredentials(true); // 쿠키 허용
     }
-	
-=======
-=======
->>>>>>> Stashed changes
+
 //import com.ssafy.mvc.interceptor.AdminInterceptor;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 //	@Autowired
 //	AdminInterceptor adminInterceptor;
 //	
@@ -40,14 +31,7 @@ public class WebConfig implements WebMvcConfigurer {
 //	public void addInterceptors(InterceptorRegistry registry) {
 //		registry.addInterceptor(adminInterceptor).addPathPatterns("/api-user/users");
 //	}
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 }
-
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
