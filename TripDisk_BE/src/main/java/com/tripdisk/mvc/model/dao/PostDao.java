@@ -4,11 +4,12 @@ import java.util.List;
 
 import com.tripdisk.mvc.model.dto.ImageFile;
 import com.tripdisk.mvc.model.dto.Post;
+import com.tripdisk.mvc.model.dto.SearchCondition;
 
 public interface PostDao {
 	
 	// 1. 게시글 전체 조회 + 검색
-	public List<Post> selectAll();
+	public List<Post> selectAll(SearchCondition condition);
 	// 2. 게시글 상세 조회
 	public Post selectOne(int postId);
 	// 3. 게시글 등록
