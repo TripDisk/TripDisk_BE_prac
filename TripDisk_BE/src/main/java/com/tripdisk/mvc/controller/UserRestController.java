@@ -83,7 +83,6 @@ public class UserRestController {
 	}
 	
 	// 세션 확인
-<<<<<<< Updated upstream
     @GetMapping("/session")
     public ResponseEntity<User> getCurrentUser(HttpSession session) {
         User user = (User) session.getAttribute("user");
@@ -91,7 +90,7 @@ public class UserRestController {
         	return new ResponseEntity<>(user, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-=======
+
     @GetMapping("/current")
     public ResponseEntity<User> getCurrentUser(HttpSession session) {
     	User user = (User) session.getAttribute("user");
@@ -99,10 +98,6 @@ public class UserRestController {
     		return new ResponseEntity<> (user, HttpStatus.OK);
     	}
     	return new ResponseEntity<> (null, HttpStatus.BAD_REQUEST);
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
     }
 
 }
