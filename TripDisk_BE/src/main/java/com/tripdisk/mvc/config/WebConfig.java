@@ -10,19 +10,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer{
-	
-	@Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("http://localhost:5173") // 프론트엔드 주소
-                .allowedMethods("GET", "POST", "PUT", "DELETE")
-                .allowCredentials(true); // 쿠키 허용
-    }
-
-//import com.ssafy.mvc.interceptor.AdminInterceptor;
-
-@Configuration
-public class WebConfig implements WebMvcConfigurer {
 
 //	@Autowired
 //	AdminInterceptor adminInterceptor;
@@ -31,7 +18,7 @@ public class WebConfig implements WebMvcConfigurer {
 //	public void addInterceptors(InterceptorRegistry registry) {
 //		registry.addInterceptor(adminInterceptor).addPathPatterns("/api-user/users");
 //	}
-}
+//}
 
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
