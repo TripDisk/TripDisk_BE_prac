@@ -2,6 +2,7 @@ package com.tripdisk.mvc.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tripdisk.mvc.model.dto.LoginRequest;
 import com.tripdisk.mvc.model.dto.User;
 import com.tripdisk.mvc.service.UserService;
 
@@ -17,6 +19,7 @@ import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api/user")
+@CrossOrigin("*")
 public class UserRestController {
 	
 	private final UserService userService;
@@ -27,7 +30,14 @@ public class UserRestController {
 	
 	// 로그인
 	@PostMapping("/login")
-	public ResponseEntity<String> login(@RequestParam String email, @RequestParam String password, HttpSession session) {
+	public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest, HttpSession session) {
+		
+		String email = loginRequest.getEmail();
+		String password = loginRequest.getPassword();
+		
+		System.out.println("Email: " + email);
+	    System.out.println("Password: " + password);
+		
 		User user = userService.checkUser(email, password);
 		
 		if (user != null) {
