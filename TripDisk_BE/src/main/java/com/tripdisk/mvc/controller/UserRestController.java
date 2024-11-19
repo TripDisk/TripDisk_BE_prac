@@ -81,9 +81,13 @@ public class UserRestController {
 	}
 	
 	// 세션 확인
-    @GetMapping("/current")
-    public User getCurrentUser(HttpSession session) {
-        return (User) session.getAttribute("user");
+    @GetMapping("/session")
+    public ResponseEntity<User> getCurrentUser(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user != null) {
+        	return new ResponseEntity<>(user, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
 }
