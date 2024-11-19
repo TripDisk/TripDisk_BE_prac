@@ -64,4 +64,12 @@ public class User {
 	public void setSocialType(SocialType socialType) {
 		this.socialType = socialType;
 	}
+
+	@Override
+	public String toString() {
+		return "User [userId=" + userId + ", username=" + username + ", password=" + password + ", email=" + email
+				+ ", profileImg=" + profileImg + ", refreshToken=" + refreshToken + ", socialType=" + socialType + "]";
+	}
+	
+	
 }

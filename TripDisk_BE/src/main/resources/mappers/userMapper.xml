@@ -2,11 +2,25 @@
 <!DOCTYPE mapper PUBLIC "//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="com.tripdisk.mvc.model.dao.UserDao">
-
-	<insert id="insertUser" useGeneratedKeys="true" keyProperty="user.user_id">
+	
+	<!-- 회원가입 -->
+	<insert id="insertUser" useGeneratedKeys="true" keyProperty="userId" parameterType="User">
 		INSERT INTO User (username, password, email, profile_img)
-		VALUES (#{user.username}, #{user.password}, #{user.email} #{user.profile_img})
+		VALUES (#{username}, #{password}, #{email}, #{profileImg})
 	</insert>
+	
+	<!-- 로그인 -->
+	<select id="findUser" resultType="User">
+		SELECT *
+		FROM User
+		WHERE email = #{email} AND password = #{password}
+	</select>
+	
+	<!-- 회원 탈퇴 -->
+	<delete id="deleteUser">
+		DELETE FROM User
+		WHERE user_id = #{userId}
+	</delete>
 
 
 </mapper>
