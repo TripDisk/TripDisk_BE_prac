@@ -6,11 +6,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tripdisk.mvc.model.dto.ImageFile;
 import com.tripdisk.mvc.model.dto.Post;
+import com.tripdisk.mvc.model.dto.SearchCondition;
 
 public interface PostService {
 	
 	// 1. 게시글 전체 조회 + 검색
-	public List<Post> getPostList();
+	public List<Post> getPostList(SearchCondition condition);
 	// 2. 게시글 상세 조회
 	public Post getPost(int postId);
 	// 3. 게시글 등록

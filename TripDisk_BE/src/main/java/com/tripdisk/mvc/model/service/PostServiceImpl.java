@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.tripdisk.mvc.model.dao.PostDao;
 import com.tripdisk.mvc.model.dto.ImageFile;
 import com.tripdisk.mvc.model.dto.Post;
+import com.tripdisk.mvc.model.dto.SearchCondition;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -30,8 +31,8 @@ public class PostServiceImpl implements PostService {
 	
 	// 1. 게시글 전체 조회 + 검색
 	@Override
-	public List<Post> getPostList() {
-		return postDao.selectAll();
+	public List<Post> getPostList(SearchCondition condition) {
+		return postDao.selectAll(condition);
 	}
 	// 2. 게시글 상세 조회
 	@Override

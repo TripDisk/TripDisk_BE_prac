@@ -5,8 +5,16 @@
 <mapper namespace="com.tripdisk.mvc.model.dao.PostDao">
 
 	<!-- 1. 게시글 전체 조회 + 검색 -->
-	<select id="selectAll" resultType="Post">
-		SELECT * FROM post;
+	<select id="selectAll" resultType="Post" parameterType="SearchCondition">
+		SELECT * FROM post
+		<!-- 검색 조건 -->
+		<if test="key != null">
+			WHERE ${key} LIKE concat('%',#{word},'%')
+		</if>
+		<!-- 정렬 조건 -->
+		<if test="orderBy != null">
+			ORDER BY ${orderBy} ${orderByDir}
+		</if>;
 	</select>
 
 	<!-- 2. 게시글 상세 조회 -->

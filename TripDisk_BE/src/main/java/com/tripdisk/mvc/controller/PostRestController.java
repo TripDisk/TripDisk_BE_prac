@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.tripdisk.mvc.model.dto.ImageFile;
 import com.tripdisk.mvc.model.dto.Post;
 import com.tripdisk.mvc.model.dto.PostDetail;
+import com.tripdisk.mvc.model.dto.SearchCondition;
 import com.tripdisk.mvc.model.service.PostService;
 
 @RestController
@@ -35,8 +36,8 @@ public class PostRestController {
 	
 	// 1. 게시글 전체 조회 + 검색
 	@GetMapping("/post")
-	public ResponseEntity<List<Post>> list(){
-		List<Post> list = postService.getPostList();
+	public ResponseEntity<List<Post>> list(@RequestParam SearchCondition condition){
+		List<Post> list = postService.getPostList(condition);
 		if(list == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		} else if (list.size() == 0) {
