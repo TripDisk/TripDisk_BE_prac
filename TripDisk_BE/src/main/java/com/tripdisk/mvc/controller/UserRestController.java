@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tripdisk.mvc.model.dto.LoginRequest;
 import com.tripdisk.mvc.model.dto.User;
-import com.tripdisk.mvc.service.UserService;
+import com.tripdisk.mvc.model.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 

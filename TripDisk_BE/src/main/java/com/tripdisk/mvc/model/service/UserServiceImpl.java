@@ -1,4 +1,4 @@
-package com.tripdisk.mvc.service;
+package com.tripdisk.mvc.model.service;
 
 import org.springframework.stereotype.Service;
 

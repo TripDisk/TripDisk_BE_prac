@@ -1,4 +1,4 @@
-package com.tripdisk.mvc.model.controller;
+package com.tripdisk.mvc.controller;
 
 import java.util.List;
 
