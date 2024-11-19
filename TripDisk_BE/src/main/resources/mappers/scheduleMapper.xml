@@ -16,8 +16,8 @@
 	
 	<!-- 3. 일정 등록 -->
 	<insert id="insertSchedule" parameterType="Schedule" keyProperty="scheduleId" useGeneratedKeys="true">
-		INSERT INTO schedule (start_date, end_date, location)
-		VALUES (#{startDate}, #{endDate}, #{location});
+		INSERT INTO schedule (user_id, start_date, end_date, location)
+		VALUES (#{userId}, #{startDate}, #{endDate}, #{location});
 	</insert>
 	
 	<!-- 4. 일정 수정 -->

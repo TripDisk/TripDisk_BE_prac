@@ -1,13 +1,11 @@
 package com.tripdisk.mvc.model.dto;
 
-import java.time.LocalDateTime;
-
 public class Schedule {
-	int scheduleId;
-	int userId;
-	String startDate;
-	String endDate;
-	String location;
+	private int scheduleId;
+	private int userId;
+	private String startDate;
+	private String endDate;
+	private String location;
 	
 	public Schedule(int userId, String startDate, String endDate, String location) {
 		this.userId = userId;

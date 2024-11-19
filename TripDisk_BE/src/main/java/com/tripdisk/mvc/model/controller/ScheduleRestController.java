@@ -55,6 +55,11 @@ public class ScheduleRestController {
 	// schedule 반환
 	@PostMapping("/schedule")
 	public ResponseEntity<String> write(@RequestBody Schedule schedule){
+		// 세션에서 가져온 userId
+		int userId = 1; 
+		// User user = session.getAttribute("user");
+		// userId = user.getUserId();
+		schedule.setUserId(userId);
 		boolean isWritten = scheduleService.writeSchedule(schedule);
 		if(isWritten) {
 			return ResponseEntity.status(HttpStatus.OK).body("일정 등록에 성공했습니다.");
@@ -80,6 +85,6 @@ public class ScheduleRestController {
 		}
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("일정 삭제에 실패했습니다.");
 	}
-	// 6. 다중 이미지파일 업로드
+	
 
 }
