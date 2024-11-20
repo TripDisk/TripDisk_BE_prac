@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,15 +20,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tripdisk.mvc.model.dto.ImageFile;
 import com.tripdisk.mvc.model.dto.Post;
-<<<<<<< HEAD
-import com.tripdisk.mvc.model.dto.PostDetail;
-=======
->>>>>>> 85054fad3848759ecd41316b376fd47a698330a7
 import com.tripdisk.mvc.model.dto.SearchCondition;
 import com.tripdisk.mvc.model.service.PostService;
 
 @RestController
 @RequestMapping("/api-post")
+@CrossOrigin("http://localhost:5173")
 public class PostRestController {
 	
 	private final PostService postService;
@@ -39,12 +37,8 @@ public class PostRestController {
 	
 	// 1. 게시글 전체 조회 + 검색
 	@GetMapping("/post")
-<<<<<<< HEAD
-	public ResponseEntity<List<Post>> list(@RequestParam SearchCondition condition){
-=======
 	public ResponseEntity<List<Post>> list(@ModelAttribute SearchCondition condition){
 		System.out.println(condition);
->>>>>>> 85054fad3848759ecd41316b376fd47a698330a7
 		List<Post> list = postService.getPostList(condition);
 		if(list == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
