@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.tripdisk.mvc.model.dto.LoginRequest;
 import com.tripdisk.mvc.model.dto.User;
@@ -52,15 +53,30 @@ public class UserRestController {
 	
 	// 회원가입
 	@PostMapping("signup")
-	public ResponseEntity<String> addUser(@RequestBody User user) {
+	public ResponseEntity<String> addUser(@RequestParam("username") String username,
+		    @RequestParam("email") String email,
+		    @RequestParam("password") String password,
+		    @RequestParam(value = "profileImg", required = false) MultipartFile profileImg) {
 		
-		boolean check = userService.addUser(user);
+		boolean check = userService.addUser(username, email, password, profileImg);
 		
 		if (check) {
 			return new ResponseEntity<String> ("회원가입 완료!", HttpStatus.CREATED);
 		}
 		return new ResponseEntity<String> ("회원가입 실패!", HttpStatus.BAD_REQUEST);
 	}
+	
+//	// 회원가입
+//	@PostMapping("signup")
+//	public ResponseEntity<String> addUser(@RequestBody User user) {
+//		
+//		boolean check = userService.addUser(user);
+//		
+//		if (check) {
+//			return new ResponseEntity<String> ("회원가입 완료!", HttpStatus.CREATED);
+//		}
+//		return new ResponseEntity<String> ("회원가입 실패!", HttpStatus.BAD_REQUEST);
+//	}
 	
 	// 회원 탈퇴
 	@DeleteMapping("signout")
