@@ -1,5 +1,7 @@
 package com.tripdisk.mvc.controller;
 
+
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,7 +21,7 @@ import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api/user")
-@CrossOrigin("*")
+@CrossOrigin("http://localhost:5173")
 public class UserRestController {
 	
 	private final UserService userService;
@@ -39,7 +41,7 @@ public class UserRestController {
 	    System.out.println("Password: " + password);
 		
 		User user = userService.checkUser(email, password);
-		
+	    
 		if (user != null) {
 			session.setAttribute("user", user);
 			return new ResponseEntity<>(user.getUsername() + "님 반갑습니다!", HttpStatus.OK);
@@ -82,8 +84,12 @@ public class UserRestController {
 	
 	// 세션 확인
     @GetMapping("/current")
-    public User getCurrentUser(HttpSession session) {
-        return (User) session.getAttribute("user");
+    public ResponseEntity<User> getCurrentUser(HttpSession session) {
+    	User user = (User) session.getAttribute("user");
+    	if (user != null) {
+    		return new ResponseEntity<> (user, HttpStatus.OK);
+    	}
+    	return new ResponseEntity<> (null, HttpStatus.BAD_REQUEST);
     }
 
 }

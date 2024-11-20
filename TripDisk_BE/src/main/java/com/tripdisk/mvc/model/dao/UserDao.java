@@ -10,7 +10,7 @@ public interface UserDao {
 	public int insertUser(User user);
 
 	// 로그인
-	public User findUser(String email, String password);
+	public User findUser(@Param("email") String email, @Param("password") String password);
 	
 	// 회원 탈퇴
 	public int deleteUser(int userId);
