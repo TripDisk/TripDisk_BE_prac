@@ -4,8 +4,8 @@ public class User {
 	private int userId;
 	private String username;
 	private String password;
-	private String email;
-	private String profileImg;
+	private String email = "";
+	private String profileImg = "";
 	private String refreshToken;
 	private SocialType socialType;
 	

@@ -17,6 +17,9 @@ public interface UserService {
 	
 	// 회원 탈퇴
 	boolean removeUser(int userId);
+	
+	// 회원 정보 수정
+	boolean updateUser(int userId, String username, String email, String password, MultipartFile profileImg);
 
 	
 	
