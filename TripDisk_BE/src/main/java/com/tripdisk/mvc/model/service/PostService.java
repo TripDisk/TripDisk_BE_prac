@@ -24,5 +24,7 @@ public interface PostService {
 	public void imageFileUpload(List<MultipartFile> imageFiles, Post post);
 	// 7. postId로 이미지 리스트 가져오기
 	public List<ImageFile> getPostImageFileList(int postId);
+	// 8. 스케줄id로 게시글 조회
+	public List<Post> getPostByScheduleId(int scheduleId);
 
 }

@@ -121,6 +121,12 @@ public class PostServiceImpl implements PostService {
 	public List<ImageFile> getPostImageFileList(int postId) {
 		return postDao.selectImageFileByPostId(postId);
 	}
+	
+	// 8. 스케줄id로 게시글 조회
+	@Override
+	public List<Post> getPostByScheduleId(int scheduleId) {
+		return postDao.selectPostsByScheduleId(scheduleId);
+	}
 
 	// 스케줄id로 게시글 조회
 }

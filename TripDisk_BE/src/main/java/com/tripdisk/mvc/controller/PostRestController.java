@@ -2,6 +2,7 @@ package com.tripdisk.mvc.controller;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,12 +11,14 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -75,7 +78,7 @@ public class PostRestController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}
 		// 작성자 검증 (로그인 사용자가 아닌 사용자가 url로 접근했을 경우 처리 403 - 인가x)
-		if(post.getUserId() != user.getUserId()) {
+		if (post.getUserId() != user.getUserId()) {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 		}
 		List<ImageFile> imageFile = postService.getPostImageFileList(postId);
@@ -86,18 +89,28 @@ public class PostRestController {
 
 	// 3. 게시글 등록
 	@PostMapping("/post")
-	public ResponseEntity<String> write(
-			@RequestParam(value = "imageFiles", required = false) List<MultipartFile> imageFiles,
-			@ModelAttribute Post post, HttpSession session) { // ======> 나중에 @RequestPart로 수정
-//		User user = (User) session.getAttribute("user");
-//		int userId = user.getUserId();
-		post.setUserId(1); //
+	public ResponseEntity<?> write(
+			@RequestPart(value = "imageFiles", required = false) List<MultipartFile> imageFiles,
+			@RequestPart Post post, HttpSession session) { // ======> 나중에 @RequestPart로 수정
+		
+		System.out.println("백 들어옴");
+		System.out.println("post");
+		
+		User user = (User) session.getAttribute("user");
+		int userId = user.getUserId();
+		post.setUserId(userId); 
 		boolean isWritten = postService.writePost(post);
 		if (isWritten) {
 			postService.imageFileUpload(imageFiles, post); // postId만 보내도 되나?
-			return ResponseEntity.status(HttpStatus.OK).body("게시글 등록에 성공했습니다.");
+			int postId = post.getPostId();
+			Map<String, Object> response = new HashMap<>();
+			response.put("message", "게시글 등록에 성공했습니다.");
+			response.put("postId", postId);
+			return ResponseEntity.status(HttpStatus.OK).body(response);
 		}
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("게시글 등록에 실패했습니다.");
+		Map<String, Object> errorResponse = new HashMap<>();
+		errorResponse.put("message", "게시글 등록에 실패했습니다.");
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
 
 	}
 	// @RequestParam과 @RequestBody는 서로 다른 방식으로 데이터를 처리한다.
@@ -106,7 +119,7 @@ public class PostRestController {
 	// required는 기본값이 true라서 이미지가 null이려면 false로 명시해줘야함.
 
 	// 4. 게시글 수정
-	@PutMapping("/post/{postId}")
+	@PatchMapping("/post/{postId}")
 	public ResponseEntity<String> update(@RequestBody Post post, @PathVariable("postId") int postId) {
 		post.setPostId(postId);
 		boolean isUpdated = postService.modifyPost(post);
@@ -126,6 +139,22 @@ public class PostRestController {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("게시글 삭제에 실패했습니다.");
 	}
 
-	// 스케줄id로 게시글 조회?
+	// 8. 스케줄id로 게시글 조회
+	@GetMapping("/{scheduleId}/post")
+	public ResponseEntity<List<Post>> postlist(@PathVariable("scheduleId") int scheduleId, HttpSession session) {
+		// 로그인 사용자 조회 (로그인 만료 시 처리 401 - 인증x)
+		User user = (User) session.getAttribute("user");
+		if (user == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		}
+		// 게시글 조회 (일정 존재X 처리)
+		List<Post> list = postService.getPostByScheduleId(scheduleId);
+		if (list == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		} else if (list.size() == 0) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(list);
+	}
 
 }

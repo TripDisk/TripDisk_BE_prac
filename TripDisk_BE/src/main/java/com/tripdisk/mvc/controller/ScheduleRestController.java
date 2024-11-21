@@ -1,6 +1,8 @@
 package com.tripdisk.mvc.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -59,17 +61,17 @@ public class ScheduleRestController {
 		// 로그인 사용자 조회 (로그인 만료 시 처리 401 - 인증x)
 		User user = (User) session.getAttribute("user");
 		if (user == null) {
-			System.out.println("user null : "+user);
+			System.out.println("user null : " + user);
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
-		System.out.println("user : "+user);
+		System.out.println("user : " + user);
 		// 일정 조회 (일정 존재X 처리)
 		Schedule schedule = scheduleService.getSchedule(scheduleId);
 		if (schedule == null) {
 			return ResponseEntity.notFound().build();
 		}
 		// 작성자 검증 (로그인 사용자가 아닌 사용자가 url로 접근했을 경우 처리 403 - 인가x)
-		if(schedule.getUserId() != user.getUserId()) {
+		if (schedule.getUserId() != user.getUserId()) {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 		}
 		return ResponseEntity.ok(schedule);
@@ -78,17 +80,22 @@ public class ScheduleRestController {
 	// 3. 일정 등록
 	// schedule 반환
 	@PostMapping("/schedule")
-	public ResponseEntity<String> write(@RequestBody Schedule schedule, HttpSession session) {
+	public ResponseEntity<Map<String, Object>> write(@RequestBody Schedule schedule, HttpSession session) {
 		// 세션에서 가져온 userId
-		int userId = 1;
-		// User user = session.getAttribute("user");
-		// userId = user.getUserId();
+		User user = (User) session.getAttribute("user");
+		int userId = user.getUserId();
 		schedule.setUserId(userId);
 		boolean isWritten = scheduleService.writeSchedule(schedule);
 		if (isWritten) {
-			return ResponseEntity.status(HttpStatus.OK).body("일정 등록에 성공했습니다.");
+			int scheduleId = schedule.getScheduleId(); // Schedule 객체에 자동 생성된 ID가 세팅되어야 함
+	        Map<String, Object> response = new HashMap<>();
+	        response.put("message", "일정 등록에 성공했습니다.");
+	        response.put("scheduleId", scheduleId);
+	        return ResponseEntity.status(HttpStatus.OK).body(response);
 		}
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("일정 등록에 실패했습니다.");
+		Map<String, Object> errorResponse = new HashMap<>();
+	    errorResponse.put("message", "일정 등록에 실패했습니다.");
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
 	}
 
 	// 4. 일정 수정

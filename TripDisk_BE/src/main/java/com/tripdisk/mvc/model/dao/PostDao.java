@@ -23,6 +23,7 @@ public interface PostDao {
 	public void insertImageFile(List<ImageFile> imageFiles);
 	// 7. postId로 이미지 리스트 가져오기
 	public List<ImageFile> selectImageFileByPostId(int postId);
-	// 스케줄id로 게시글 조회
+	// 8. 스케줄id로 게시글 조회
+	public List<Post> selectPostsByScheduleId(int scheduleId);
 
 }

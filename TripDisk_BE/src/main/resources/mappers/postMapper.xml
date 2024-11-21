@@ -119,7 +119,11 @@
 		FROM imagefiles WHERE post_id = #{postId};
 	</select>
 
-	<!-- 스케줄id로 게시글 조회 -->
+	<!-- 8. 스케줄id로 게시글 조회 -->
+	<select id="selectPostsByScheduleId" parameterType="int" resultType="Post">
+		SELECT *
+		FROM post WHERE schedule_id = #{scheduleId};
+	</select>
 </mapper>
 
 
