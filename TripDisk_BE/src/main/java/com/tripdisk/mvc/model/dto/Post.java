@@ -1,5 +1,7 @@
 package com.tripdisk.mvc.model.dto;
 
+import java.util.List;
+
 public class Post {
 	private int postId;
 	private int scheduleId;
@@ -10,6 +12,7 @@ public class Post {
 	private String createdAt;
 	private String updatedAt;
 	private boolean isShared;
+	private List<ImageFile> imageFiles;
 	
 	public int getPostId() {
 		return postId;
@@ -66,11 +69,19 @@ public class Post {
 		this.isShared = isShared;
 	}
 	
+	public List<ImageFile> getImageFiles() {
+		return imageFiles;
+	}
+	public void setFiles(List<ImageFile> imageFiles) {
+		this.imageFiles = imageFiles;
+	}
 	@Override
 	public String toString() {
 		return "Post [postId=" + postId + ", scheduleId=" + scheduleId + ", place=" + place + ", date=" + date
 				+ ", title=" + title + ", content=" + content + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt
-				+ ", isShared=" + isShared + "]";
+				+ ", isShared=" + isShared + ", imageFiles=" + imageFiles + "]";
 	}
+	
+	
 	
 }

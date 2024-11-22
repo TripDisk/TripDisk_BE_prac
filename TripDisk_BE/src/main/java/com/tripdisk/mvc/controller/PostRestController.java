@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,11 +20,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tripdisk.mvc.model.dto.ImageFile;
 import com.tripdisk.mvc.model.dto.Post;
-import com.tripdisk.mvc.model.dto.PostDetail;
+import com.tripdisk.mvc.model.dto.SearchCondition;
 import com.tripdisk.mvc.model.service.PostService;
 
 @RestController
 @RequestMapping("/api-post")
+@CrossOrigin("http://localhost:5173")
 public class PostRestController {
 	
 	private final PostService postService;
@@ -35,8 +37,9 @@ public class PostRestController {
 	
 	// 1. 게시글 전체 조회 + 검색
 	@GetMapping("/post")
-	public ResponseEntity<List<Post>> list(){
-		List<Post> list = postService.getPostList();
+	public ResponseEntity<List<Post>> list(@ModelAttribute SearchCondition condition){
+		System.out.println(condition);
+		List<Post> list = postService.getPostList(condition);
 		if(list == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		} else if (list.size() == 0) {
@@ -46,15 +49,14 @@ public class PostRestController {
 	}
 	// 2. 게시글 상세 조회
 	@GetMapping("/post/{postId}")
-	public ResponseEntity<PostDetail> detail(@PathVariable("postId") int postId){
-		Post post = postService.getPost(postId);
-		List<ImageFile> imageFile = postService.getPostImageFileList(postId);
-		PostDetail postDetail = new PostDetail(post, imageFile);
-		
+	public ResponseEntity<Post> detail(@PathVariable("postId") int postId){
+		Post post = postService.getPost(postId);		
 		if(post == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}
-		return ResponseEntity.status(HttpStatus.OK).body(postDetail);
+		List<ImageFile> imageFile = postService.getPostImageFileList(postId);
+		post.setFiles(imageFile);
+		return ResponseEntity.status(HttpStatus.OK).body(post);
 	}
 	// 상세 조회 시 게시글, 이미지를 동시에 갖고 오기 위해 PostDetail (Dto)를 추가적으로 만들자
 	
