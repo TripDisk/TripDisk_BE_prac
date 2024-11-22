@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,7 +44,6 @@ public class PostRestController {
 	public ResponseEntity<List<Post>> list(@ModelAttribute SearchCondition condition, HttpSession session) {
 		// 로그인 사용자 조회 (로그인 만료 시 처리)
 		User user = (User) session.getAttribute("user");
-		System.out.println(user);
 		if (user == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
@@ -56,9 +54,10 @@ public class PostRestController {
 		List<Post> list = postService.getPostList(param);
 		if (list == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-		} else if (list.size() == 0) {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-		}
+		} 
+//		else if (list.size() == 0) {
+//			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+//		}
 		return ResponseEntity.status(HttpStatus.OK).body(list);
 	}
 
@@ -122,10 +121,15 @@ public class PostRestController {
 
 	// 4. 게시글 수정
 	@PatchMapping("/post/{postId}")
-	public ResponseEntity<String> update(@RequestBody Post post, @PathVariable("postId") int postId) {
+	public ResponseEntity<String> update(
+			@RequestPart(value = "imageFiles", required = false) List<MultipartFile> imageFiles,
+			@RequestPart Post post, @PathVariable("postId") int postId, HttpSession session) {
 		post.setPostId(postId);
+		User user = (User) session.getAttribute("user");
+		post.setUserId(user.getUserId());
 		boolean isUpdated = postService.modifyPost(post);
 		if (isUpdated) {
+			postService.imageFileUpload(imageFiles, post);
 			return ResponseEntity.status(HttpStatus.OK).body("게시글 수정에 성공했습니다.");
 		}
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("게시글 수정에 실패했습니다.");
