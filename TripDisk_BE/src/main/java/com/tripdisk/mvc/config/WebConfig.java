@@ -26,4 +26,11 @@ public class WebConfig implements WebMvcConfigurer{
 				.allowedHeaders("*") // 허용할 요청 헤더
 				.allowCredentials(true); // 쿠키 허용
 	}
+
+	@Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/img/**")
+                .addResourceLocations("classpath:/static/img/");
+    }
 }
+
