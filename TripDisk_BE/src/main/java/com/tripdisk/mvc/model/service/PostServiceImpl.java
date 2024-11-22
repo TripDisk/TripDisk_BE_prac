@@ -74,24 +74,33 @@ public class PostServiceImpl implements PostService {
 				// 파일들 저장할 경로(위치) 설정
 //				Resource resource = resourceLoader.getResource("classpath:/static/img"); 
 //				File uploadDir = resource.getFile(); 
-				
+
 				Path uploadDir = Paths.get("src/../target/classes/static/img/");
 				if (!Files.exists(uploadDir)) {
-                    Files.createDirectories(uploadDir); // 폴더가 없으면 생성
-                }
-				
-				// 파일 하나씩 처리
+					Files.createDirectories(uploadDir); // 폴더가 없으면 생성
+				}
+				// 기존 이미지 삭제
+				List<ImageFile> existingFiles = postDao.selectImageFileByPostId(post.getPostId());
+				for (ImageFile existingFile : existingFiles) {
+					// 파일 시스템에서 삭제
+					Path filePath = uploadDir.resolve(existingFile.getFileName());
+					Files.deleteIfExists(filePath);
+				}
+				// DB에서 기존 파일 정보 삭제
+				postDao.deleteImageFilesByPostId(post.getPostId());
+
+				// 새로운 파일 하나씩 처리
 				List<ImageFile> list = new ArrayList<>();
 				for (MultipartFile imageFile : imageFiles) {
-					String fileName = UUID.randomUUID().toString()+"_"+imageFile.getOriginalFilename(); // 고유 이름 생성
-					String fileId = "/img/"+fileName; // 경로
-				
+					String fileName = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename(); // 고유 이름 생성
+					String fileId = "/img/" + fileName; // 경로
+
 					// 파일 저장
 //					imageFile.transferTo(new File(uploadDir, fileId)); // fileId로 저장
 					Path filePath = uploadDir.resolve(fileName); // 파일 저장 경로
 //                  imageFile.transferTo(filePath.toFile()); // 파일을 지정된 경로에 저장
 					Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-					
+
 					// 이미지파일 정보 저장 객체 생성
 					ImageFile saveImagefile = new ImageFile();
 					saveImagefile.setFileId(fileId);
@@ -121,12 +130,11 @@ public class PostServiceImpl implements PostService {
 	public List<ImageFile> getPostImageFileList(int postId) {
 		return postDao.selectImageFileByPostId(postId);
 	}
-	
+
 	// 8. 스케줄id로 게시글 조회
 	@Override
 	public List<Post> getPostByScheduleId(int scheduleId) {
 		return postDao.selectPostsByScheduleId(scheduleId);
 	}
 
-	// 스케줄id로 게시글 조회
 }

@@ -25,5 +25,7 @@ public interface PostDao {
 	public List<ImageFile> selectImageFileByPostId(int postId);
 	// 8. 스케줄id로 게시글 조회
 	public List<Post> selectPostsByScheduleId(int scheduleId);
+	// 9. 기존 이미지 삭제
+	public void deleteImageFilesByPostId(int postId);
 
 }
