@@ -4,6 +4,7 @@ import java.util.List;
 
 public class Post {
 	private int postId;
+	private int userId;
 	private int scheduleId;
 	private String place;
 	private String date;
@@ -19,6 +20,12 @@ public class Post {
 	}
 	public void setPostId(int postId) {
 		this.postId = postId;
+	}
+	public int getUserId() {
+		return userId;
+	}
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 	public int getScheduleId() {
 		return scheduleId;
@@ -77,11 +84,9 @@ public class Post {
 	}
 	@Override
 	public String toString() {
-		return "Post [postId=" + postId + ", scheduleId=" + scheduleId + ", place=" + place + ", date=" + date
-				+ ", title=" + title + ", content=" + content + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt
-				+ ", isShared=" + isShared + ", imageFiles=" + imageFiles + "]";
+		return "Post [postId=" + postId + ", userId=" + userId + ", scheduleId=" + scheduleId + ", place=" + place
+				+ ", date=" + date + ", title=" + title + ", content=" + content + ", createdAt=" + createdAt
+				+ ", updatedAt=" + updatedAt + ", isShared=" + isShared + ", imageFiles=" + imageFiles + "]";
 	}
-	
-	
 	
 }

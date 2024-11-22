@@ -1,6 +1,8 @@
 package com.tripdisk.mvc.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tripdisk.mvc.model.dto.Schedule;
+import com.tripdisk.mvc.model.dto.User;
 import com.tripdisk.mvc.model.service.ScheduleService;
+
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api-schedule")
@@ -34,9 +39,15 @@ public class ScheduleRestController {
 	// 우선 사용자 구분 없이 CRUD
 	// 1. 일정 전체 조회 - 검색정렬 나중에 구현
 	@GetMapping("/schedule")
-	public ResponseEntity<List<Schedule>> list() { // 로컬스토리지나 쿠키나 토큰에서 꺼낸 id (클라이언트가 서버한테)
-		int userId = 1;
+	public ResponseEntity<List<Schedule>> list(HttpSession session) { // 로컬스토리지나 쿠키나 토큰에서 꺼낸 id (클라이언트가 서버한테)
+		// 로그인 사용자 조회 (로그인 만료 시 처리)
+		User user = (User) session.getAttribute("user");
+		if (user == null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		}
+		int userId = user.getUserId();
 		List<Schedule> list = scheduleService.getScheduleList(userId);
+		System.out.println(list);
 		if (list == null)
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		else if (list.size() == 0)
@@ -46,47 +57,66 @@ public class ScheduleRestController {
 
 	// 2. 일정 상세 조회
 	@GetMapping("/schedule/{scheduleId}")
-	public ResponseEntity<Schedule> detail(@PathVariable("scheduleId") int scheduleId) {
+	public ResponseEntity<Schedule> detail(@PathVariable("scheduleId") int scheduleId, HttpSession session) {
+		// 로그인 사용자 조회 (로그인 만료 시 처리 401 - 인증x)
+		User user = (User) session.getAttribute("user");
+		if (user == null) {
+			System.out.println("user null : " + user);
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		}
+		System.out.println("user : " + user);
+		// 일정 조회 (일정 존재X 처리)
 		Schedule schedule = scheduleService.getSchedule(scheduleId);
-		if(schedule == null) {
+		if (schedule == null) {
 			return ResponseEntity.notFound().build();
+		}
+		// 작성자 검증 (로그인 사용자가 아닌 사용자가 url로 접근했을 경우 처리 403 - 인가x)
+		if (schedule.getUserId() != user.getUserId()) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 		}
 		return ResponseEntity.ok(schedule);
 	}
+
 	// 3. 일정 등록
 	// schedule 반환
 	@PostMapping("/schedule")
-	public ResponseEntity<String> write(@RequestBody Schedule schedule){
+	public ResponseEntity<Map<String, Object>> write(@RequestBody Schedule schedule, HttpSession session) {
 		// 세션에서 가져온 userId
-		int userId = 1; 
-		// User user = session.getAttribute("user");
-		// userId = user.getUserId();
+		User user = (User) session.getAttribute("user");
+		int userId = user.getUserId();
 		schedule.setUserId(userId);
 		boolean isWritten = scheduleService.writeSchedule(schedule);
-		if(isWritten) {
-			return ResponseEntity.status(HttpStatus.OK).body("일정 등록에 성공했습니다.");
+		if (isWritten) {
+			int scheduleId = schedule.getScheduleId(); // Schedule 객체에 자동 생성된 ID가 세팅되어야 함
+	        Map<String, Object> response = new HashMap<>();
+	        response.put("message", "일정 등록에 성공했습니다.");
+	        response.put("scheduleId", scheduleId);
+	        return ResponseEntity.status(HttpStatus.OK).body(response);
 		}
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("일정 등록에 실패했습니다.");
+		Map<String, Object> errorResponse = new HashMap<>();
+	    errorResponse.put("message", "일정 등록에 실패했습니다.");
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
 	}
+
 	// 4. 일정 수정
 	@PutMapping("/schedule/{scheduleId}")
-	public ResponseEntity<?> update(@PathVariable("scheduleId") int scheduleId, @RequestBody Schedule schedule){
+	public ResponseEntity<?> update(@PathVariable("scheduleId") int scheduleId, @RequestBody Schedule schedule) {
 		schedule.setScheduleId(scheduleId); // 아니면 프론트에서 hidden으로 이미 schedule에 넣어서 보내면 url변수로 안보내도 될듯
 		boolean isUpdated = scheduleService.modifySchedule(schedule);
-		if(isUpdated) {
+		if (isUpdated) {
 			return ResponseEntity.status(HttpStatus.OK).body("일정 수정에 성공했습니다.");
 		}
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("일정 수정에 실패했습니다.");
 	}
+
 	// 5. 일정 삭제
 	@DeleteMapping("/schedule/{scheduleId}")
-	public ResponseEntity<?> remove(@PathVariable("scheduleId") int scheduleId){
+	public ResponseEntity<?> remove(@PathVariable("scheduleId") int scheduleId) {
 		boolean isDeleted = scheduleService.removeSchedule(scheduleId);
-		if(isDeleted) {
+		if (isDeleted) {
 			return ResponseEntity.status(HttpStatus.OK).body("일정 삭제에 성공했습니다.");
 		}
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("일정 삭제에 실패했습니다.");
 	}
-	
 
 }
