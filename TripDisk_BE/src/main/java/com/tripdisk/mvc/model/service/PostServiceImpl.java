@@ -72,10 +72,10 @@ public class PostServiceImpl implements PostService {
 			try {
 
 				// 파일들 저장할 경로(위치) 설정
-//				Resource resource = resourceLoader.getResource("classpath:/static/img"); // 백엔드 서버에서만 접근할 수 있는 클래스패스 위치
+//				Resource resource = resourceLoader.getResource("classpath:/static/img"); 
 //				File uploadDir = resource.getFile(); 
 				
-				Path uploadDir = Paths.get("src/main/resources/static/img/");
+				Path uploadDir = Paths.get("src/../target/classes/static/img/");
 				if (!Files.exists(uploadDir)) {
                     Files.createDirectories(uploadDir); // 폴더가 없으면 생성
                 }

@@ -14,10 +14,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -94,12 +92,16 @@ public class PostRestController {
 			@RequestPart Post post, HttpSession session) { // ======> 나중에 @RequestPart로 수정
 		
 		System.out.println("백 들어옴");
-		System.out.println("post");
 		
 		User user = (User) session.getAttribute("user");
 		int userId = user.getUserId();
+//		int userId = 1;
 		post.setUserId(userId); 
 		boolean isWritten = postService.writePost(post);
+		//////////////
+		System.out.println("이미지파일 : "+imageFiles);
+		System.out.println("끝");
+		/////////////
 		if (isWritten) {
 			postService.imageFileUpload(imageFiles, post); // postId만 보내도 되나?
 			int postId = post.getPostId();
