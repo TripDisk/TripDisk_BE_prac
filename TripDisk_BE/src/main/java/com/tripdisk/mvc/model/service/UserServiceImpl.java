@@ -7,7 +7,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -48,7 +47,7 @@ public class UserServiceImpl implements UserService {
 				
 				// 파일들 저장할 경로(위치) 설정
 //				Resource resource = resourceLoader.getResource("classpath:/static/img"); 
-				Path uploadDir = Paths.get("src/main/resources/static/img/");
+				Path uploadDir = Paths.get("src/../target/classes/static/img/");
 	            if (!Files.exists(uploadDir)) {
 	                Files.createDirectories(uploadDir); // 디렉토리 생성
 	                System.out.println("static/img 디렉토리 생성 완료: " + uploadDir);
@@ -111,7 +110,7 @@ public class UserServiceImpl implements UserService {
 				
 				// 파일들 저장할 경로(위치) 설정
 //				Resource resource = resourceLoader.getResource("classpath:/static/img"); 
-				Path uploadDir = Paths.get("src/main/resources/static/img/");
+				Path uploadDir = Paths.get("src/../target/classes/static/img/");
 	            if (!Files.exists(uploadDir)) {
 	                Files.createDirectories(uploadDir); // 디렉토리 생성
 	                System.out.println("static/img 디렉토리 생성 완료: " + uploadDir);
