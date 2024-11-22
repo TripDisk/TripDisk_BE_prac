@@ -50,8 +50,8 @@ public class ScheduleRestController {
 		System.out.println(list);
 		if (list == null)
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		else if (list.size() == 0)
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+//		else if (list.size() == 0)
+//			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 		return ResponseEntity.status(HttpStatus.OK).body(list);
 	}
 
