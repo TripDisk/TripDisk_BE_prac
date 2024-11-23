@@ -79,7 +79,14 @@
 		UPDATE post
 		SET schedule_id
 		= #{scheduleId}, place = #{place}, date = #{date}, title = #{title},
-		content = #{content}, is_shared = #{isShared}
+		content = #{content}, 
+		is_shared = 
+	    <if test="isShared == true">
+	      1
+	    </if>
+	    <if test="isShared == false">
+	      0
+	    </if>
 		WHERE post_id =
 		#{postId};
 	</update>
