@@ -20,7 +20,8 @@
 		<!-- 검색 조건 -->
 		<choose>
 			<when test="key != null and word != null">
-				WHERE ${condition.key} LIKE concat('%',#{condition.word},'%') AND user_id
+				WHERE ${condition.key} LIKE
+				concat('%',#{condition.word},'%') AND user_id
 				= #{userId}
 			</when>
 			<otherwise>
@@ -133,9 +134,17 @@
 
 	<!-- 9. 기존 이미지 삭제 -->
 	<delete id="deleteImageFilesByPostId" parameterType="int">
-		DELETE FROM imagefiles
+		DELETE FROM
+		imagefiles
 		WHERE post_id = #{postId}
 	</delete>
+
+	<!-- 10. fileName으로 이미지 삭제 -->
+	<delete id="deleteImageFileByFileName" parameterType="String">
+		DELETE FROM imagefiles
+		WHERE file_name = #{fileName}
+	</delete>
+	
 </mapper>
 
 

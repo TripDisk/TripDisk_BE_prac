@@ -26,5 +26,7 @@ public interface PostService {
 	public List<ImageFile> getPostImageFileList(int postId);
 	// 8. 스케줄id로 게시글 조회
 	public List<Post> getPostByScheduleId(int scheduleId);
+	// 9. fileName으로 이미지 삭제
+	public void deleteImageFiles(List<String> fileNames);
 
 }

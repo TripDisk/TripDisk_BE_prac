@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tripdisk.mvc.model.dto.ImageFile;
 import com.tripdisk.mvc.model.dto.Post;
 import com.tripdisk.mvc.model.dto.SearchCondition;
@@ -122,13 +125,27 @@ public class PostRestController {
 	// 4. 게시글 수정
 	@PatchMapping("/post/{postId}")
 	public ResponseEntity<String> update(
-			@RequestPart(value = "imageFiles", required = false) List<MultipartFile> imageFiles,
+			@RequestPart(value = "imageFiles", required = false) List<MultipartFile> imageFiles, @RequestPart(value = "fileNames", required = false) String fileNames,
 			@RequestPart Post post, @PathVariable("postId") int postId, HttpSession session) {
 		post.setPostId(postId);
 		User user = (User) session.getAttribute("user");
 		post.setUserId(user.getUserId());
+		System.out.println(imageFiles);
 		boolean isUpdated = postService.modifyPost(post);
 		if (isUpdated) {
+			if(fileNames != null) {
+				List<String> removedFiles;
+				try {
+					removedFiles = new ObjectMapper().readValue(fileNames, List.class);
+					postService.deleteImageFiles(removedFiles);
+				} catch (JsonMappingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JsonProcessingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			postService.imageFileUpload(imageFiles, post);
 			return ResponseEntity.status(HttpStatus.OK).body("게시글 수정에 성공했습니다.");
 		}
