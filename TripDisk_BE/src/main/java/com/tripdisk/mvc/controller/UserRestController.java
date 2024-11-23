@@ -106,7 +106,7 @@ public class UserRestController {
     	if (user != null) {
     		 // 프로필 이미지가 없는 경우 기본 이미지 URL 설정
             if (user.getProfileImg() == null || user.getProfileImg().isEmpty()) {
-                user.setProfileImg("http://localhost:8080/img/default-profile.png");
+                user.setProfileImg("default-profile.png");
             }
     		
     		return new ResponseEntity<> (user, HttpStatus.OK);
