@@ -27,5 +27,7 @@ public interface PostDao {
 	public List<Post> selectPostsByScheduleId(int scheduleId);
 	// 9. 기존 이미지 삭제
 	public void deleteImageFilesByPostId(int postId);
+	// 10. fileName으로 이미지 삭제
+	public void deleteImageFileByFileName(String fileName);
 
 }

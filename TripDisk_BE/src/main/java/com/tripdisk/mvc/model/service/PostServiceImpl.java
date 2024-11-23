@@ -79,15 +79,16 @@ public class PostServiceImpl implements PostService {
 				if (!Files.exists(uploadDir)) {
 					Files.createDirectories(uploadDir); // 폴더가 없으면 생성
 				}
-				// 기존 이미지 삭제
-				List<ImageFile> existingFiles = postDao.selectImageFileByPostId(post.getPostId());
-				for (ImageFile existingFile : existingFiles) {
-					// 파일 시스템에서 삭제
-					Path filePath = uploadDir.resolve(existingFile.getFileName());
-					Files.deleteIfExists(filePath);
-				}
-				// DB에서 기존 파일 정보 삭제
-				postDao.deleteImageFilesByPostId(post.getPostId());
+
+//				// 기존 이미지 삭제
+//				List<ImageFile> existingFiles = postDao.selectImageFileByPostId(post.getPostId());
+//				for (ImageFile existingFile : existingFiles) {
+//					// 파일 시스템에서 삭제
+//					Path filePath = uploadDir.resolve(existingFile.getFileName());
+//					Files.deleteIfExists(filePath);
+//				}
+//				// DB에서 기존 파일 정보 삭제
+//				postDao.deleteImageFilesByPostId(post.getPostId());
 
 				// 새로운 파일 하나씩 처리
 				List<ImageFile> list = new ArrayList<>();
@@ -135,6 +136,28 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public List<Post> getPostByScheduleId(int scheduleId) {
 		return postDao.selectPostsByScheduleId(scheduleId);
+	}
+
+	// 9. fileName으로 기존 이미지 삭제
+	@Override
+	public void deleteImageFiles(List<String> fileNames) {
+		
+		try {
+			Path uploadDir = Paths.get("src/../target/classes/static/img/");
+
+			for (String fileName : fileNames) {
+				// 파일 시스템에서 삭제
+				Path filePath = uploadDir.resolve(fileName);
+				Files.deleteIfExists(filePath);
+
+				// DB에서 삭제
+				postDao.deleteImageFileByFileName(fileName);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 }
