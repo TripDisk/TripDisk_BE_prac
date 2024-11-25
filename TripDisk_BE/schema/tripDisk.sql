@@ -8,15 +8,15 @@ CREATE TABLE `User` (
 	`password` VARCHAR(255)	NOT NULL,
 	`email`	VARCHAR(255) NOT NULL UNIQUE,
 	`profile_img` VARCHAR(255) DEFAULT NULL, 
-	`refresh_token`	VARCHAR(255) NOT NULL,
-	`social_type` ENUM('ZERO', 'KAKAO') NOT NULL
+	`refresh_token`	VARCHAR(255),
+	`social_type` ENUM('ZERO', 'KAKAO')
 );
 
 CREATE TABLE `Schedule` (
 	`schedule_id` INT NOT NULL AUTO_INCREMENT,
 	`user_id` INT NOT NULL,
-	`start_date` DATETIME NOT NULL,
-	`end_date` DATETIME NOT NULL,
+	`start_date` DATE NOT NULL,
+	`end_date` DATE NOT NULL,
     `location` VARCHAR(255) NOT NULL,
     PRIMARY KEY(schedule_id),
     CONSTRAINT `user_schedule_fk` FOREIGN KEY (`user_id`) REFERENCES `User`(`user_id`) ON DELETE CASCADE
@@ -27,7 +27,7 @@ CREATE TABLE `Post` (
     `user_id` INT NOT NULL,
     `schedule_id` INT NOT NULL,
 	`place` VARCHAR(255) NOT NULL,
-    `date` DATETIME NOT NULL,
+    `date` DATE NOT NULL,
 	`title`	VARCHAR(100) NOT NULL,
 	`content` TEXT NOT NULL,
 	`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -69,21 +69,21 @@ CREATE TABLE `SearchCondition` (
 
 
 INSERT INTO `User` (`username`, `password`, `email`, `profile_img`, `refresh_token`, `social_type`)
-VALUES ('user1', '1234', 'user1@example.com', 'https://example.com/user1.jpg', 'refresh_token_123', 'KAKAO'),
-('user2', '1234', 'user2@example.com', 'https://example.com/user2.jpg', 'refresh_token_456', 'KAKAO'),
-('user3', '1234', 'user3@example.com', 'https://example.com/user3.jpg', 'refresh_token_789', 'ZERO');
+VALUES ('user1', '1234', 'test@test.com', 'https://example.com/user1.jpg', 'refresh_token_123', 'KAKAO'),
+('user2', '1234', 'test2@test.com', 'https://example.com/user2.jpg', 'refresh_token_456', 'KAKAO'),
+('user3', '1234', 'test3@test.com', 'https://example.com/user3.jpg', 'refresh_token_789', 'ZERO');
 
 INSERT INTO `Schedule` (`user_id`, `start_date`, `end_date`, `location`)
-VALUES (1, '2024-11-15 00:00:00', '2024-11-22 00:00:00', '대만'),
-(1, '2024-11-22 00:00:00', '2024-11-25 00:00:00', '일본'),
-(1, '2024-11-05 00:00:00', '2024-11-10 00:00:00', '스위스');
+VALUES (1, '2024-11-15', '2024-11-22', '대만'),
+(2, '2024-11-22', '2024-11-25', '일본'),
+(3, '2024-11-05', '2024-11-10', '스위스');
 
 INSERT INTO `Post` (`user_id`, `schedule_id`, `place`, `date`, `title`, `content`, `is_shared`)
-VALUES (1, 1, '타이베이 101', '2024-11-16 10:30:00', '대만 첫날', '대만에 도착해서 타이베이 101을 구경했습니다. 전망이 정말 아름다웠어요.', true),
-(2, 1, '스린 야시장', '2024-11-17 19:00:00', '야시장에서 먹방', '스린 야시장에서 다양한 먹거리를 즐겼습니다. 버블티가 특히 맛있었어요!', true),
-(2, 2, '오사카 성', '2024-11-23 14:00:00', '일본 여행 시작!', '오사카 성에서 사진을 찍었어요. 역사적인 느낌이 물씬 납니다.', false),
-(3, 3, '마터호른', '2024-11-06 09:00:00', '스위스의 절경', '마터호른을 등산하며 대자연의 경이로움을 느꼈습니다.', false),
-(3, 3, '취리히', '2024-11-08 15:30:00', '취리히에서의 하루', '취리히의 아름다운 도시를 산책하며 시간을 보냈습니다.', false);
+VALUES (1, 1, '타이베이 101', '2024-11-16', '대만 첫날', '대만에 도착해서 타이베이 101을 구경했습니다. 전망이 정말 아름다웠어요.', true),
+(2, 1, '스린 야시장', '2024-11-17', '야시장에서 먹방', '스린 야시장에서 다양한 먹거리를 즐겼습니다. 버블티가 특히 맛있었어요!', true),
+(2, 2, '오사카 성', '2024-11-23', '일본 여행 시작!', '오사카 성에서 사진을 찍었어요. 역사적인 느낌이 물씬 납니다.', false),
+(3, 3, '마터호른', '2024-11-06', '스위스의 절경', '마터호른을 등산하며 대자연의 경이로움을 느꼈습니다.', false),
+(3, 3, '취리히', '2024-11-08', '취리히에서의 하루', '취리히의 아름다운 도시를 산책하며 시간을 보냈습니다.', false);
 
 INSERT INTO `Likes` (`user_id`, `schedule_id`)
 VALUES (2, 1),

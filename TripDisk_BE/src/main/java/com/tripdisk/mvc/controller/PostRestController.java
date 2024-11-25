@@ -41,12 +41,27 @@ public class PostRestController {
 	public PostRestController(PostService postService) {
 		this.postService = postService;
 	}
+	
+	// 0. 사용자 무관 공유 게시글 조회
+	@GetMapping("/shared")
+	public ResponseEntity<List<Post>> shared(@ModelAttribute SearchCondition condition) {
 
-	// 1. 게시글 전체 조회 + 검색
+		List<Post> list = postService.getSharedPosts();
+		if (list == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		} 
+		System.out.println("list : " + list);
+		return ResponseEntity.status(HttpStatus.OK).body(list);
+	}
+
+	// 1. 사용자 전용 게시글 전체 조회 + 검색
 	@GetMapping("/post")
 	public ResponseEntity<List<Post>> list(@ModelAttribute SearchCondition condition, HttpSession session) {
 		// 로그인 사용자 조회 (로그인 만료 시 처리)
+		System.out.println("전체 조회 : " + session);
+		System.out.println(condition);
 		User user = (User) session.getAttribute("user");
+		System.out.println("여기: "+user);
 		if (user == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
@@ -61,6 +76,7 @@ public class PostRestController {
 //		else if (list.size() == 0) {
 //			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 //		}
+		System.out.println("list : " + list);
 		return ResponseEntity.status(HttpStatus.OK).body(list);
 	}
 
