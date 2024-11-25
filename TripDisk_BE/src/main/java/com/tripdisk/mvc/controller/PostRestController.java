@@ -31,7 +31,7 @@ import com.tripdisk.mvc.model.service.PostService;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
-@RequestMapping("/api-post")
+@RequestMapping("/api/post")
 @CrossOrigin("http://localhost:5173")
 public class PostRestController {
 
@@ -55,7 +55,7 @@ public class PostRestController {
 	}
 
 	// 1. 사용자 전용 게시글 전체 조회 + 검색
-	@GetMapping("/post")
+	@GetMapping("")
 	public ResponseEntity<List<Post>> list(@ModelAttribute SearchCondition condition, HttpSession session) {
 		// 로그인 사용자 조회 (로그인 만료 시 처리)
 		System.out.println("전체 조회 : " + session);
@@ -81,7 +81,7 @@ public class PostRestController {
 	}
 
 	// 2. 게시글 상세 조회
-	@GetMapping("/post/{postId}")
+	@GetMapping("/{postId}")
 	public ResponseEntity<Post> detail(@PathVariable("postId") int postId, HttpSession session) {
 		// 로그인 사용자 조회 (로그인 만료 시 처리 401 - 인증x)
 		User user = (User) session.getAttribute("user");
@@ -104,7 +104,7 @@ public class PostRestController {
 	// 상세 조회 시 게시글, 이미지를 동시에 갖고 오기 위해 PostDetail (Dto)를 추가적으로 만들자
 
 	// 3. 게시글 등록
-	@PostMapping("/post")
+	@PostMapping("")
 	public ResponseEntity<?> write(
 			@RequestPart(value = "imageFiles", required = false) List<MultipartFile> imageFiles,
 			@RequestPart Post post, HttpSession session) { // ======> 나중에 @RequestPart로 수정
@@ -139,7 +139,7 @@ public class PostRestController {
 	// required는 기본값이 true라서 이미지가 null이려면 false로 명시해줘야함.
 
 	// 4. 게시글 수정
-	@PatchMapping("/post/{postId}")
+	@PatchMapping("/{postId}")
 	public ResponseEntity<String> update(
 			@RequestPart(value = "imageFiles", required = false) List<MultipartFile> imageFiles, @RequestPart(value = "fileNames", required = false) String fileNames,
 			@RequestPart Post post, @PathVariable("postId") int postId, HttpSession session) {
@@ -169,7 +169,7 @@ public class PostRestController {
 	}
 
 	// 5. 게시글 삭제
-	@DeleteMapping("/post/{postId}")
+	@DeleteMapping("/{postId}")
 	public ResponseEntity<String> delete(@PathVariable("postId") int postId) {
 		boolean isDeleted = postService.removePost(postId);
 		if (isDeleted) {

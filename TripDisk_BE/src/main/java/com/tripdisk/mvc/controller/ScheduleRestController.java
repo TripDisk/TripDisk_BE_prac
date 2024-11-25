@@ -24,7 +24,7 @@ import com.tripdisk.mvc.model.service.ScheduleService;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
-@RequestMapping("/api-schedule")
+@RequestMapping("/api/schedule")
 @CrossOrigin("http://localhost:5173")
 public class ScheduleRestController {
 
@@ -38,7 +38,7 @@ public class ScheduleRestController {
 
 	// 우선 사용자 구분 없이 CRUD
 	// 1. 일정 전체 조회 - 검색정렬 나중에 구현
-	@GetMapping("/schedule")
+	@GetMapping("")
 	public ResponseEntity<List<Schedule>> list(HttpSession session) { // 로컬스토리지나 쿠키나 토큰에서 꺼낸 id (클라이언트가 서버한테)
 		// 로그인 사용자 조회 (로그인 만료 시 처리)
 		User user = (User) session.getAttribute("user");
@@ -56,7 +56,7 @@ public class ScheduleRestController {
 	}
 
 	// 2. 일정 상세 조회
-	@GetMapping("/schedule/{scheduleId}")
+	@GetMapping("/{scheduleId}")
 	public ResponseEntity<Schedule> detail(@PathVariable("scheduleId") int scheduleId, HttpSession session) {
 		// 로그인 사용자 조회 (로그인 만료 시 처리 401 - 인증x)
 		User user = (User) session.getAttribute("user");
@@ -79,7 +79,7 @@ public class ScheduleRestController {
 
 	// 3. 일정 등록
 	// schedule 반환
-	@PostMapping("/schedule")
+	@PostMapping("")
 	public ResponseEntity<Map<String, Object>> write(@RequestBody Schedule schedule, HttpSession session) {
 		// 세션에서 가져온 userId
 		User user = (User) session.getAttribute("user");
@@ -99,7 +99,7 @@ public class ScheduleRestController {
 	}
 
 	// 4. 일정 수정
-	@PutMapping("/schedule/{scheduleId}")
+	@PutMapping("/{scheduleId}")
 	public ResponseEntity<?> update(@PathVariable("scheduleId") int scheduleId, @RequestBody Schedule schedule) {
 		schedule.setScheduleId(scheduleId); // 아니면 프론트에서 hidden으로 이미 schedule에 넣어서 보내면 url변수로 안보내도 될듯
 		boolean isUpdated = scheduleService.modifySchedule(schedule);
@@ -110,7 +110,7 @@ public class ScheduleRestController {
 	}
 
 	// 5. 일정 삭제
-	@DeleteMapping("/schedule/{scheduleId}")
+	@DeleteMapping("/{scheduleId}")
 	public ResponseEntity<?> remove(@PathVariable("scheduleId") int scheduleId) {
 		boolean isDeleted = scheduleService.removeSchedule(scheduleId);
 		if (isDeleted) {
