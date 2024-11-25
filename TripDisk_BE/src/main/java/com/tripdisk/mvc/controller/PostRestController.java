@@ -203,8 +203,22 @@ public class PostRestController {
 		return new ResponseEntity<>("좋아요 카운트 감소 실패", HttpStatus.BAD_REQUEST);
 	}
 	
-//	// 11. 좋아요 클릭시 내가 내 게시물 선택했는가 체크
-//	@PostMapping("/check/mylike")
-//	public ResponseEntity<?> checkMyLike(@RequestBody("post") Post post)
+	// 11. 좋아요 클릭시 내가 내 게시물 선택했는지 업데이트
+	@PostMapping("/check/mylike")
+	public ResponseEntity<?> checkMyLike(@RequestBody Post post) {
+		System.out.println("제발...");
+		boolean currIsLiked = post.getIsLiked();
+		System.out.println("현재 상태 : " + currIsLiked);
+		post.setIsLiked(!currIsLiked);
+		System.out.println("저장 상태 : " + post.getIsLiked());
+		boolean check = postService.checkMyLike(post.getUserId(), post.getPostId());
+		
+		System.out.println("최종 상태 : " + post.getIsLiked());
+		
+		if (check) {
+			return new ResponseEntity<>("반영 성공", HttpStatus.OK);
+		}
+		return new ResponseEntity<>("반영 실패", HttpStatus.BAD_REQUEST);
+	}
 
 }

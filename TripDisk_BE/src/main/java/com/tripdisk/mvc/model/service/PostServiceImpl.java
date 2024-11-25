@@ -174,4 +174,10 @@ public class PostServiceImpl implements PostService {
 		return result == 1;
 	}
 
+	@Override
+	public boolean checkMyLike(int userId, int postId) {
+		int result = postDao.checkMyLike(userId, postId);
+		return result == 1;
+	}
+
 }

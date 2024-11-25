@@ -91,10 +91,10 @@ public class Post {
 		this.likesCount = likesCount;
 	}
 	
-	public boolean getLiked() {
+	public boolean getIsLiked() {
 		return isLiked;
 	}
-	public void setLiked(boolean isLiked) {
+	public void setIsLiked(boolean isLiked) {
 		this.isLiked = isLiked;
 	}
 	@Override

@@ -33,5 +33,7 @@ public interface PostDao {
 	public int countUpLikes(int postId);
 	// 12. 좋아요 카운트 감소
 	public int countDownLikes(int postId);
+	// 13. 내 게시물 좋아요 업데이트
+	public int checkMyLike(int userId, int postId);
 
 }

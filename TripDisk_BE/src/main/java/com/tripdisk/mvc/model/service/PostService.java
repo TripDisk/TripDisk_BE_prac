@@ -32,4 +32,6 @@ public interface PostService {
 	public boolean countUpLikes(int postId);
 	// 11. 좋아요 카운트 감소
 	public boolean countDownLikes(int postId);
+	// 12. 내 게시물 좋아요 업데이트
+	public boolean checkMyLike(int userId, int postId);
 }

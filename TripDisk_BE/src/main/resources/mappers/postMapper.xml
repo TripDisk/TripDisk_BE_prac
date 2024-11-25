@@ -166,6 +166,13 @@
 		WHERE post_id = #{postId}
 	</update>
 	
+	<!-- 13. 내 게시물 좋아요 업데이트 -->
+	<update id="checkMyLike">
+		UPDATE post
+		SET is_liked = CASE WHEN is_liked = 1 THEN 0 ELSE 1 END
+		WHERE user_id = #{userId} AND post_id = #{postId}
+	</update>
+	
 </mapper>
 
 
