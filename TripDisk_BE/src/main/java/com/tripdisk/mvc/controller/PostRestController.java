@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -179,5 +180,31 @@ public class PostRestController {
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(list);
 	}
+	
+	// 9. 좋아요 클릭시 좋아요 카운트 up
+	@PostMapping("/likes/countup/{postId}")
+	public ResponseEntity<?> likesCountUp(@PathVariable("postId") int postId) {
+		boolean check = postService.countUpLikes(postId);
+		
+		if (check) {
+			return new ResponseEntity<>("좋아요 카운트 1 증가", HttpStatus.ACCEPTED);
+		}
+		return new ResponseEntity<>("좋아요 카운트 증가 실패", HttpStatus.BAD_REQUEST);
+	}
+	
+	// 10. 좋아요 클릭시 좋아요 카운트 down
+	@PostMapping("/likes/countdown/{postId}")
+	public ResponseEntity<?> likesCountDown(@PathVariable("postId") int postId) {
+		boolean check = postService.countDownLikes(postId);
+		
+		if (check) {
+			return new ResponseEntity<>("좋아요 카운트 1 감소", HttpStatus.ACCEPTED);
+		}
+		return new ResponseEntity<>("좋아요 카운트 감소 실패", HttpStatus.BAD_REQUEST);
+	}
+	
+//	// 11. 좋아요 클릭시 내가 내 게시물 선택했는가 체크
+//	@PostMapping("/check/mylike")
+//	public ResponseEntity<?> checkMyLike(@RequestBody("post") Post post)
 
 }

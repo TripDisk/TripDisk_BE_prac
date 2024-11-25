@@ -28,5 +28,8 @@ public interface PostService {
 	public List<Post> getPostByScheduleId(int scheduleId);
 	// 9. fileName으로 이미지 삭제
 	public void deleteImageFiles(List<String> fileNames);
-
+	// 10. 좋아요 카운트 증가
+	public boolean countUpLikes(int postId);
+	// 11. 좋아요 카운트 감소
+	public boolean countDownLikes(int postId);
 }

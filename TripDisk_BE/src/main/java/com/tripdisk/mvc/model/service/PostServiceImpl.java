@@ -159,5 +159,19 @@ public class PostServiceImpl implements PostService {
 		}
 
 	}
+	
+	// 10. 좋아요 카운트 증가
+	@Override
+	public boolean countUpLikes(int postId) {
+		int result = postDao.countUpLikes(postId);
+		return result == 1;
+	}
+
+	// 11. 좋아요 카운트 감소
+	@Override
+	public boolean countDownLikes(int postId) {
+		int result = postDao.countDownLikes(postId);
+		return result == 1;
+	}
 
 }

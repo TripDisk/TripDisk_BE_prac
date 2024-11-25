@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.tripdisk.mvc.model.dao.LikesDao">
+	
+	<!-- 좋아요 등록 -->
+	<insert id="insertLike">
+		INSERT INTO Likes (user_id, post_id)
+		VALUES (#{userId}, #{postId})
+	</insert>
+	
+	<!-- 좋아요 취소 -->
+	<delete id="deleteLike">
+		DELETE FROM Likes
+		WHERE user_id = #{userId} AND post_id = #{postId}
+	</delete>
+	
+	<!-- 클릭 여부 검사 -->
+	<select id="checkLike">
+		SELECT * FROM Likes
+		WHERE user_id = #{userId} AND post_id = #{postId}
+	</select>
+	
+</mapper>

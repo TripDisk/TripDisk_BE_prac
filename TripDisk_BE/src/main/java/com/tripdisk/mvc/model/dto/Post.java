@@ -14,6 +14,8 @@ public class Post {
 	private String updatedAt;
 	private boolean isShared;
 	private List<ImageFile> imageFiles;
+	private int likesCount;
+	private boolean isLiked;
 	
 	public int getPostId() {
 		return postId;
@@ -82,11 +84,27 @@ public class Post {
 	public void setFiles(List<ImageFile> imageFiles) {
 		this.imageFiles = imageFiles;
 	}
+	public int getLikesCount() {
+		return likesCount;
+	}
+	public void setLikesCount(int likesCount) {
+		this.likesCount = likesCount;
+	}
+	
+	public boolean getLiked() {
+		return isLiked;
+	}
+	public void setLiked(boolean isLiked) {
+		this.isLiked = isLiked;
+	}
 	@Override
 	public String toString() {
 		return "Post [postId=" + postId + ", userId=" + userId + ", scheduleId=" + scheduleId + ", place=" + place
 				+ ", date=" + date + ", title=" + title + ", content=" + content + ", createdAt=" + createdAt
-				+ ", updatedAt=" + updatedAt + ", isShared=" + isShared + ", imageFiles=" + imageFiles + "]";
+				+ ", updatedAt=" + updatedAt + ", isShared=" + isShared + ", imageFiles=" + imageFiles + ", likesCount="
+				+ likesCount + ", isLiked=" + isLiked + "]";
 	}
+	
+	
 	
 }
