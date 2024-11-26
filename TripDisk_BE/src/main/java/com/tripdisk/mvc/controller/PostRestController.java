@@ -51,7 +51,6 @@ public class PostRestController {
 		if (list == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		} 
-		System.out.println("list : " + list);
 		return ResponseEntity.status(HttpStatus.OK).body(list);
 	}
 
@@ -59,10 +58,7 @@ public class PostRestController {
 	@GetMapping("")
 	public ResponseEntity<List<Post>> list(@ModelAttribute SearchCondition condition, HttpSession session) {
 		// 로그인 사용자 조회 (로그인 만료 시 처리)
-		System.out.println("전체 조회 : " + session);
-		System.out.println(condition);
 		User user = (User) session.getAttribute("user");
-		System.out.println("여기: "+user);
 		if (user == null) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
@@ -77,7 +73,6 @@ public class PostRestController {
 //		else if (list.size() == 0) {
 //			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 //		}
-		System.out.println("list : " + list);
 		return ResponseEntity.status(HttpStatus.OK).body(list);
 	}
 
@@ -118,8 +113,6 @@ public class PostRestController {
 		post.setUserId(userId); 
 		boolean isWritten = postService.writePost(post);
 		//////////////
-		System.out.println("이미지파일 : "+imageFiles);
-		System.out.println("끝");
 		/////////////
 		if (isWritten) {
 			postService.imageFileUpload(imageFiles, post); // postId만 보내도 되나?
@@ -147,7 +140,7 @@ public class PostRestController {
 		post.setPostId(postId);
 		User user = (User) session.getAttribute("user");
 		post.setUserId(user.getUserId());
-		System.out.println(imageFiles);
+//		System.out.println(imageFiles);
 		boolean isUpdated = postService.modifyPost(post);
 		if (isUpdated) {
 			if(fileNames != null) {
@@ -222,14 +215,14 @@ public class PostRestController {
 	// 11. 좋아요 클릭시 내가 내 게시물 선택했는지 업데이트
 	@PostMapping("/check/mylike")
 	public ResponseEntity<?> checkMyLike(@RequestBody Post post) {
-		System.out.println("제발...");
+//		System.out.println("제발...");
 		boolean currIsLiked = post.getIsLiked();
-		System.out.println("현재 상태 : " + currIsLiked);
+//		System.out.println("현재 상태 : " + currIsLiked);
 		post.setIsLiked(!currIsLiked);
-		System.out.println("저장 상태 : " + post.getIsLiked());
+//		System.out.println("저장 상태 : " + post.getIsLiked());
 		boolean check = postService.checkMyLike(post.getUserId(), post.getPostId());
 		
-		System.out.println("최종 상태 : " + post.getIsLiked());
+//		System.out.println("최종 상태 : " + post.getIsLiked());
 		
 		if (check) {
 			return new ResponseEntity<>("반영 성공", HttpStatus.OK);
