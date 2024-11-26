@@ -33,8 +33,8 @@ public class PostServiceImpl implements PostService {
 
 	// 0. 사용자 무관 공유 게시글 조회
 	@Override
-	public List<Post> getSharedPosts() {	
-		return postDao.selectShared();
+	public List<Post> getSharedPosts(int userId) {	
+		return postDao.selectShared(userId);
 	}
 
 	// 1. 게시글 전체 조회 + 검색
@@ -45,8 +45,8 @@ public class PostServiceImpl implements PostService {
 
 	// 2. 게시글 상세 조회
 	@Override
-	public Post getPost(int postId) {
-		return postDao.selectOne(postId);
+	public Post getPost(int userId, int postId) {
+		return postDao.selectOne(userId, postId);
 	}
 
 	// 3. 게시글 등록
@@ -140,8 +140,8 @@ public class PostServiceImpl implements PostService {
 
 	// 8. 스케줄id로 게시글 조회
 	@Override
-	public List<Post> getPostByScheduleId(int scheduleId) {
-		return postDao.selectPostsByScheduleId(scheduleId);
+	public List<Post> getPostByScheduleId(int userId, int scheduleId) {
+		return postDao.selectPostsByScheduleId(userId, scheduleId);
 	}
 
 	// 9. fileName으로 기존 이미지 삭제
@@ -165,26 +165,7 @@ public class PostServiceImpl implements PostService {
 		}
 
 	}
-	
-	// 10. 좋아요 카운트 증가
-	@Override
-	public boolean countUpLikes(int postId) {
-		int result = postDao.countUpLikes(postId);
-		return result == 1;
-	}
 
-	// 11. 좋아요 카운트 감소
-	@Override
-	public boolean countDownLikes(int postId) {
-		int result = postDao.countDownLikes(postId);
-		return result == 1;
-	}
-
-	@Override
-	public boolean checkMyLike(int userId, int postId) {
-		int result = postDao.checkMyLike(userId, postId);
-		return result == 1;
-	}
 
 
 }
