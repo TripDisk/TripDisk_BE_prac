@@ -47,7 +47,6 @@ public class ScheduleRestController {
 		}
 		int userId = user.getUserId();
 		List<Schedule> list = scheduleService.getScheduleList(userId);
-		System.out.println(list);
 		if (list == null)
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 //		else if (list.size() == 0)

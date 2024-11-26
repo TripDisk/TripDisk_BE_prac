@@ -8,14 +8,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tripdisk.mvc.model.dto.Likes;
 import com.tripdisk.mvc.model.service.LikesService;
 
 @RestController
-@RequestMapping("/api-likes")
+@RequestMapping("/api/likes")
 @CrossOrigin("http://localhost:5173")
 public class LikesRestController {
 	
@@ -54,7 +53,7 @@ public class LikesRestController {
 	
 	// 좋아요 클릭 여부 검사
 	@GetMapping("/check")
-	public ResponseEntity<?> checkLike(Likes likes) {
+	public ResponseEntity<?> checkLike(@RequestBody Likes likes) {
 		System.out.println("좋아요 클릭 여부 검사 시작");
 		boolean check = likesService.checkLike(likes.getUserId(), likes.getPostId());
 		

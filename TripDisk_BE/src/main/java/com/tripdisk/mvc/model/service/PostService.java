@@ -11,11 +11,11 @@ import com.tripdisk.mvc.model.dto.Post;
 public interface PostService {
 	
 	// 0. 사용자 무관 공유 게시글 조회
-	public List<Post> getSharedPosts();
+	public List<Post> getSharedPosts(int userId);
 	// 1. 게시글 전체 조회 + 검색
 	public List<Post> getPostList(HashMap<String, Object> param);
 	// 2. 게시글 상세 조회
-	public Post getPost(int postId);
+	public Post getPost(int userId, int postId);
 	// 3. 게시글 등록
 	public boolean writePost(Post post);
 	// 4. 게시글 수정
@@ -27,13 +27,8 @@ public interface PostService {
 	// 7. postId로 이미지 리스트 가져오기
 	public List<ImageFile> getPostImageFileList(int postId);
 	// 8. 스케줄id로 게시글 조회
-	public List<Post> getPostByScheduleId(int scheduleId);
+	public List<Post> getPostByScheduleId(int userId, int scheduleId);
 	// 9. fileName으로 이미지 삭제
 	public void deleteImageFiles(List<String> fileNames);
-	// 10. 좋아요 카운트 증가
-	public boolean countUpLikes(int postId);
-	// 11. 좋아요 카운트 감소
-	public boolean countDownLikes(int postId);
-	// 12. 내 게시물 좋아요 업데이트
-	public boolean checkMyLike(int userId, int postId);
+
 }
