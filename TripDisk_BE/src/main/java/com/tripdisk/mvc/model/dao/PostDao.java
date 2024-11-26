@@ -31,5 +31,11 @@ public interface PostDao {
 	public void deleteImageFilesByPostId(int postId);
 	// 10. fileName으로 이미지 삭제
 	public void deleteImageFileByFileName(String fileName);
+	// 11. 좋아요 카운트 증가
+	public int countUpLikes(int postId);
+	// 12. 좋아요 카운트 감소
+	public int countDownLikes(int postId);
+	// 13. 내 게시물 좋아요 업데이트
+	public int checkMyLike(int userId, int postId);
 
 }

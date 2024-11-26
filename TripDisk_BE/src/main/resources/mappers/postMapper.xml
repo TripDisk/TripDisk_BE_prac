@@ -24,7 +24,7 @@
 		parameterType="HashMap">
 		SELECT
 		p.post_id, p.schedule_id, p.place, p.date, p.title, p.content,
-		p.created_at, p.updated_at, p.is_shared,
+		p.created_at, p.updated_at, p.is_shared, p.likes_count, p.is_liked,
 		f.file_id, f.file_name
 		FROM
 		post p
@@ -199,6 +199,26 @@
 		WHERE file_name = #{fileName}
 	</delete>
 
+	<!-- 11. 좋아요 카운트 증가 -->
+	<update id="countUpLikes">
+		UPDATE post
+		SET likes_count = likes_count + 1
+		WHERE post_id = #{postId}
+	</update>
+	
+	<!-- 12. 좋아요 카운트 감소 -->
+	<update id="countDownLikes">
+		UPDATE post
+		SET likes_count = likes_count - 1
+		WHERE post_id = #{postId}
+	</update>
+	
+	<!-- 13. 내 게시물 좋아요 업데이트 -->
+	<update id="checkMyLike">
+		UPDATE post
+		SET is_liked = CASE WHEN is_liked = 1 THEN 0 ELSE 1 END
+		WHERE user_id = #{userId} AND post_id = #{postId}
+	</update>
 </mapper>
 
 
