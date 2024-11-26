@@ -39,9 +39,6 @@ public class UserRestController {
 		String email = loginRequest.getEmail();
 		String password = loginRequest.getPassword();
 		
-		System.out.println("Email: " + email);
-	    System.out.println("Password: " + password);
-		
 		User user = userService.checkUser(email, password);
 	    
 		if (user != null) {
@@ -121,17 +118,11 @@ public class UserRestController {
 		    @RequestParam("password") String password,
 		    @RequestParam(value = "profileImg", required = false) MultipartFile profileImg) {
     	
-    	System.out.println("회원 정보 수정 백 진입");
-    	System.out.println("userId: " + userId);
-        System.out.println("username: " + username);
-        System.out.println("email: " + email);
-        System.out.println("password: " + password);
-        
-        if (profileImg != null) {
-            System.out.println("프로필 이미지 이름: " + profileImg.getOriginalFilename());
-        } else {
-            System.out.println("프로필 이미지 없음");
-        }
+//        if (profileImg != null) {
+//            System.out.println("프로필 이미지 이름: " + profileImg.getOriginalFilename());
+//        } else {
+//            System.out.println("프로필 이미지 없음");
+//        }
         
 		boolean check = userService.updateUser(userId, username, email, password, profileImg);
 				

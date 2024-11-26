@@ -54,6 +54,7 @@ public class PostRestController {
 		if (list == null) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}
+
 		return ResponseEntity.status(HttpStatus.OK).body(list);
 	}
 
@@ -74,6 +75,7 @@ public class PostRestController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}
 		System.out.println("list 여기1 : " + list);
+
 		return ResponseEntity.status(HttpStatus.OK).body(list);
 	}
 
@@ -109,6 +111,7 @@ public class PostRestController {
 		int userId = user.getUserId();
 		post.setUserId(userId);
 		boolean isWritten = postService.writePost(post);
+
 		if (isWritten) {
 			postService.imageFileUpload(imageFiles, post); // postId만 보내도 되나?
 			int postId = post.getPostId();

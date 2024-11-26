@@ -50,22 +50,17 @@ public class UserServiceImpl implements UserService {
 				Path uploadDir = Paths.get("src/../target/classes/static/img/");
 	            if (!Files.exists(uploadDir)) {
 	                Files.createDirectories(uploadDir); // 디렉토리 생성
-	                System.out.println("static/img 디렉토리 생성 완료: " + uploadDir);
 	            }
 				
 				// 파일 저장
 				String fileName = UUID.randomUUID() + "_" + profileImg.getOriginalFilename();
-				System.out.println("fileName : " + fileName);
 //	            Path imagePath = Paths.get("static/img/" + fileName); // 이미지 저장 경로
 				Path imagePath = uploadDir.resolve(fileName);
-	            System.out.println("imagePath : " + imagePath);
 	            Files.copy(profileImg.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
-	            System.out.println("파일 복사 완료");
 	            
 	            // 저장된 파일 이름을 DB에 저장	
 	            user.setProfileImg(fileName); 
 			}
-			System.out.println(user.getProfileImg());
 			
 			int result = userDao.insertUser(user);
 			return result == 1;
@@ -103,31 +98,23 @@ public class UserServiceImpl implements UserService {
 			user.setEmail(email);
 			user.setPassword(password);
 			
-			System.out.println(user.getUserId() + " " + user.getUsername() + " " + user.getPassword());
-			
 			if (profileImg != null && !profileImg.isEmpty()) {
-				System.out.println("프로필 이미지 존재");
 				
 				// 파일들 저장할 경로(위치) 설정
 //				Resource resource = resourceLoader.getResource("classpath:/static/img"); 
 				Path uploadDir = Paths.get("src/../target/classes/static/img/");
 	            if (!Files.exists(uploadDir)) {
 	                Files.createDirectories(uploadDir); // 디렉토리 생성
-	                System.out.println("static/img 디렉토리 생성 완료: " + uploadDir);
 	            }
 				
 				// 파일 저장
 				String fileName = UUID.randomUUID() + "_" + profileImg.getOriginalFilename();
-				System.out.println("fileName : " + fileName);
 				Path imagePath = uploadDir.resolve(fileName);
-	            System.out.println("imagePath : " + imagePath);
 	            Files.copy(profileImg.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
-	            System.out.println("파일 복사 완료");
 	            
 	            // 저장된 파일 이름을 DB에 저장	
 	            user.setProfileImg(fileName); 
 			}
-			System.out.println(user.getProfileImg());
 			
 			int result = userDao.updateUser(user);
 			return result == 1;

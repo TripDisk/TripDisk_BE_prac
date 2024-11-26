@@ -28,9 +28,9 @@ public class LikesRestController {
 	// 좋아요 등록
 	@PostMapping("/add")
 	public ResponseEntity<?> addLike(@RequestBody Likes likes) {
-		System.out.println("좋아요 등록 시작");
-		System.out.println("userId : " + likes.getUserId());
-		System.out.println("postId : " + likes.getPostId());
+//		System.out.println("좋아요 등록 시작");
+//		System.out.println("userId : " + likes.getUserId());
+//		System.out.println("postId : " + likes.getPostId());
 		boolean check = likesService.addLike(likes.getUserId(), likes.getPostId());
 		
 		if (check) {
@@ -42,7 +42,7 @@ public class LikesRestController {
 	// 좋아요 취소
 	@PostMapping("/delete")
 	public ResponseEntity<?> deleteLike(@RequestBody Likes likes) {
-		System.out.println("좋아요 취소 시작");
+//		System.out.println("좋아요 취소 시작");
 		boolean check = likesService.deleteLike(likes.getUserId(), likes.getPostId());
 		
 		if (check) {
@@ -58,8 +58,10 @@ public class LikesRestController {
 		boolean check = likesService.checkLike(likes.getUserId(), likes.getPostId());
 		
 		if (check) {
+//			System.out.println(true + " : 좋아요 클릭함");
 			return new ResponseEntity<>(true, HttpStatus.OK);
 		}
+//		System.out.println(false + " : 좋아요 클릭 안함");
 		return new ResponseEntity<>(false, HttpStatus.OK);
 	}
 
