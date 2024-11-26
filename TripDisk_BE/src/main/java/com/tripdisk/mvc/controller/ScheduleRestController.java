@@ -64,7 +64,6 @@ public class ScheduleRestController {
 			System.out.println("user null : " + user);
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
-		System.out.println("user : " + user);
 		// 일정 조회 (일정 존재X 처리)
 		Schedule schedule = scheduleService.getSchedule(scheduleId);
 		if (schedule == null) {
