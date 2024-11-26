@@ -7,7 +7,9 @@ import com.tripdisk.mvc.model.dto.ImageFile;
 import com.tripdisk.mvc.model.dto.Post;
 
 public interface PostDao {
-	
+
+	// 0. 사용자 무관 공유 게시글 조회
+	public List<Post> selectShared();
 	// 1. 게시글 전체 조회 + 검색
 	public List<Post> selectAll(HashMap<String, Object> param);
 	// mapper에 넘길 parameterType이 여러개일 때 @Param 사용
