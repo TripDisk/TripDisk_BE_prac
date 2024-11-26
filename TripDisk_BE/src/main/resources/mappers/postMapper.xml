@@ -4,7 +4,22 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tripdisk.mvc.model.dao.PostDao">
 
-	<!-- 1. 게시글 전체 조회 + 검색 -->
+	<!-- 0. 사용자 무관 공유 게시글 조회 -->
+	<select id="selectShared" resultMap="postImagefileJoinRows">
+		SELECT
+		p.post_id, p.user_id, p.schedule_id, p.place, p.date, p.title,
+		p.content,
+		p.created_at, p.updated_at, p.is_shared,
+		f.file_id,
+		f.file_name
+		FROM
+		post p
+		<!-- 이미지파일 조인 -->
+		LEFT JOIN
+		imagefiles f ON p.post_id = f.post_id
+		WHERE p.is_shared = 1;
+	</select>
+	<!-- 1. 사용자 전용 게시글 전체 조회 + 검색 -->
 	<select id="selectAll" resultMap="postImagefileJoinRows"
 		parameterType="HashMap">
 		SELECT
@@ -18,21 +33,50 @@
 		imagefiles f ON p.post_id = f.post_id
 
 		<!-- 검색 조건 -->
-		<choose>
-			<when test="key != null and word != null">
-				WHERE ${condition.key} LIKE
-				concat('%',#{condition.word},'%') AND user_id
-				= #{userId}
-			</when>
-			<otherwise>
-				WHERE user_id = #{userId}
-			</otherwise>
-		</choose>
+		<!-- <choose> <when test="key != null and word != null"> WHERE ${condition.key} 
+			LIKE concat('%',#{condition.word},'%') AND user_id = #{userId} </when> <otherwise> 
+			WHERE user_id = #{userId} </otherwise> </choose> -->
+		<!-- where절 : 조건이 없을 경우 WHERE 절을 자동으로 생략 -->
+		<where>
+			<if test="condition.key != null and condition.word != null">
+				<!-- condition.key가 'all'인 경우, title, content, place에서 모두 검색 -->
+				<if test="condition.key == 'all'">
+					(title LIKE concat('%', #{condition.word}, '%')
+					OR
+					content LIKE concat('%', #{condition.word}, '%')
+					OR place LIKE
+					concat('%', #{condition.word}, '%'))
+				</if>
+
+				<!-- condition.key가 'all'이 아닌 경우, 해당 key에 대해 검색 -->
+				<if test="condition.key != 'all'">
+					${condition.key} LIKE concat('%', #{condition.word},
+					'%')
+				</if>
+
+			</if>
+			<if test="condition.key == null or condition.word == null">
+				AND user_id = #{userId}
+			</if>
+		</where>
 
 		<!-- 정렬 조건 -->
-		<if test="orderBy != null and orderByDir != null">
-			ORDER BY ${condition.orderBy} ${condition.orderByDir}
-		</if>
+		<choose>
+			<when test="orderBy != null">
+				<if test="orderBy == 'date'">
+					ORDER BY date ${orderByDir}
+				</if>
+				<if test="orderBy == 'title'">
+					ORDER BY title ${orderByDir}
+				</if>
+				<if test="orderBy == 'content'">
+					ORDER BY content ${orderByDir}
+				</if>
+			</when>
+			<otherwise>
+				ORDER BY date ASC
+			</otherwise>
+		</choose>
 		;
 	</select>
 
@@ -40,6 +84,7 @@
 	<resultMap id="postImagefileJoinRows" type="Post">
 		<id property="postId" column="post_id" />
 		<result property="scheduleId" column="schedule_id" />
+		<result property="userId" column="user_id" />
 		<result property="place" column="place" />
 		<result property="date" column="date" />
 		<result property="title" column="title" />
@@ -79,15 +124,16 @@
 	<update id="updatePost" parameterType="Post">
 		UPDATE post
 		SET schedule_id
-		= #{scheduleId}, place = #{place}, date = #{date}, title = #{title},
-		content = #{content}, 
-		is_shared = 
-	    <if test="isShared == true">
-	      1
-	    </if>
-	    <if test="isShared == false">
-	      0
-	    </if>
+		= #{scheduleId}, place = #{place}, date =
+		#{date}, title = #{title},
+		content = #{content},
+		is_shared =
+		<if test="isShared == true">
+			1
+		</if>
+		<if test="isShared == false">
+			0
+		</if>
 		WHERE post_id =
 		#{postId};
 	</update>
@@ -148,10 +194,11 @@
 
 	<!-- 10. fileName으로 이미지 삭제 -->
 	<delete id="deleteImageFileByFileName" parameterType="String">
-		DELETE FROM imagefiles
+		DELETE FROM
+		imagefiles
 		WHERE file_name = #{fileName}
 	</delete>
-	
+
 	<!-- 11. 좋아요 카운트 증가 -->
 	<update id="countUpLikes">
 		UPDATE post
@@ -172,7 +219,6 @@
 		SET is_liked = CASE WHEN is_liked = 1 THEN 0 ELSE 1 END
 		WHERE user_id = #{userId} AND post_id = #{postId}
 	</update>
-	
 </mapper>
 
 

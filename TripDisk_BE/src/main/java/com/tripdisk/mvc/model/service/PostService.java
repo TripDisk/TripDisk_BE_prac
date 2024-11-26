@@ -10,6 +10,8 @@ import com.tripdisk.mvc.model.dto.Post;
 
 public interface PostService {
 	
+	// 0. 사용자 무관 공유 게시글 조회
+	public List<Post> getSharedPosts();
 	// 1. 게시글 전체 조회 + 검색
 	public List<Post> getPostList(HashMap<String, Object> param);
 	// 2. 게시글 상세 조회

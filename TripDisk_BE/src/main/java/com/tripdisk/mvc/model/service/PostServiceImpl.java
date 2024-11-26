@@ -31,6 +31,12 @@ public class PostServiceImpl implements PostService {
 		this.resourceLoader = resourceLoader;
 	}
 
+	// 0. 사용자 무관 공유 게시글 조회
+	@Override
+	public List<Post> getSharedPosts() {	
+		return postDao.selectShared();
+	}
+
 	// 1. 게시글 전체 조회 + 검색
 	@Override
 	public List<Post> getPostList(HashMap<String, Object> param) {
@@ -179,5 +185,6 @@ public class PostServiceImpl implements PostService {
 		int result = postDao.checkMyLike(userId, postId);
 		return result == 1;
 	}
+
 
 }
