@@ -140,7 +140,7 @@ public class PostRestController {
 		post.setPostId(postId);
 		User user = (User) session.getAttribute("user");
 		post.setUserId(user.getUserId());
-		System.out.println(imageFiles);
+//		System.out.println(imageFiles);
 		boolean isUpdated = postService.modifyPost(post);
 		if (isUpdated) {
 			if(fileNames != null) {
